@@ -32,6 +32,7 @@ public class TimeConverter {
 		StringBuilder output = new StringBuilder(34);
 
 		try {
+
 			// Parse the time according to the specific needs of the Berlin clock
 			TimeParser parser = new TimeParser(aTime);
 			
@@ -53,15 +54,16 @@ public class TimeConverter {
 				.append(System.lineSeparator());
 			
 			// Five minutes output. This is the start sequence of the constant, padded with the filler to 11 characters.
-			// e.g. minutes=43 -> [YYRYYRYY]
+			// e.g. minutes=43 / 5 = 8 -> [YYRYYRYY] + OOO
 			int fiveMinuteEndIndex = parser.getMinutes() / 5;
 			output.append(FIVE_MINUTE_DISPLAY.substring(0, fiveMinuteEndIndex))
 				.append(FIVE_MINUTE_FILLER.substring(fiveMinuteEndIndex, 11))
 				.append(System.lineSeparator());
 			
-			// One minute output. This is a sliding window over the predefined constant, same as in .
+			// One minute output. This is a sliding window over the predefined constant, same as in One hours output.
 			int oneMinuteBeginIndex = 4 - (parser.getMinutes() % 5);
 			output.append(ONE_MINUTE_DISPLAY.substring(oneMinuteBeginIndex, oneMinuteBeginIndex + 4));
+
 		} catch (IllegalArgumentException iae) {
 			return iae.getMessage();
 		}
